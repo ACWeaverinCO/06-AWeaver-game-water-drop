@@ -1,0 +1,214 @@
+/* Charity: water Brand Colors & Fonts
+
+Primary Colors:
+- Yellow:     #FFC907
+- Blue:       #2E9DF7
+
+Secondary Colors:
+- Light Blue: #8BD1CB
+- Green:      #4FCB53
+- Orange:     #FF902A
+- Red:        #F5402C
+- Dark Green: #159A48
+- Pink:       #F16061
+
+Fonts:
+- Proxima Nova
+- Avenir
+
+*/
+
+game-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff7e1(255,255,255,0.95);
+    border-radius: 16px;
+    padding: 40px 60px;
+    font-size: 2.2rem;
+    color: #2E9DF7;
+    font-weight: bold;
+    z-index: 100;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+    text-align: center;
+}
+.confetti {
+    position: absolute;
+    width: 12px;
+    height: 24px;
+    border-radius: 4px;
+    opacity: 0.85;
+    z-index: 101;
+    animation: confetti-fall 1.2s linear forwards;
+}
+@keyframes confetti-fall {
+    0% { top: -30px; opacity: 1; }
+    80% { opacity: 1; }
+    100% { top: 650px; opacity: 0; }
+}
+/* Charity: water Brand Colors & Fonts
+Primary Colors:
+- Yellow:     #FFC907
+- Blue:       #2E9DF7
+Secondary Colors:
+- Light Blue: #8BD1CB
+- Green:      #4FCB53
+- Orange:     #FF902A
+- Red:        #F5402C
+- Dark Green: #159A48
+- Pink:       #F16061
+Fonts:
+- Proxima Nova
+- Avenir
+*/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #fff7e1;
+    font-family: Arial, sans-serif;
+}
+.game-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+.score-panel {
+    display: flex;
+    justify-content: space-between;  /* Space between score and button */
+    align-items: center;
+    width: 800px;
+    padding: 10px;
+    background-color: #fed8c1;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.timer {
+    flex: 0 1 auto;
+    font-size: 24px;
+    font-weight: bold;
+}
+#game-container {
+    width: 800px;
+    height: 600px;
+    background-color: #fed8c1;
+    border: 2px solid #003366;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+#start-btn {
+    padding: 8px 16px;
+    background-color: #003366;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+     margin-right: 10px;
+}
+#reset-btn {
+    padding: 8px 16px;
+    background-color: #003366;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+#reset-btn:hover {
+    background-color: #ffc907;
+}
+
+#start-btn:hover {
+    background-color: #ffc907;
+}
+.score {
+    flex: 0 1 auto;  /* Don't grow, can shrink, auto basis */
+    font-size: 24px;
+    font-weight: bold;
+}
+.water-drop {
+    position: absolute;
+    width: 60px;  /* increased from 40px */
+    height: 60px; /* increased from 40px */
+    background-color: #003366;
+    border-radius: 50%;
+    animation: dropFall linear forwards;
+    transform-origin: center;
+    cursor: pointer;
+    padding: 15px;  /* Add padding for larger click area */
+    margin: -15px;  /* Offset padding to maintain visual size */
+    transition: transform 0.1s ease;  /* Smooth hover effect */
+}
+.water-drop:hover {
+    transform: scale(1.1);  /* Slight grow effect on hover */
+}
+
+.bad-drop {
+    background-color: #ff4444;
+    box-shadow: 0 0 10px 2px #F5402C;
+}
+.bad-explode {
+    animation: bad-explode 0.4s linear forwards;
+    z-index: 2;
+}
+@keyframes bad-explode {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+        box-shadow: 0 0 0 0 #F5402C;
+    }
+    60% {
+        transform: scale(2.2) rotate(-20deg);
+        opacity: 0.7;
+        box-shadow: 0 0 30px 10px #F5402C;
+        background-color: #F5402C;
+    }
+    100% {
+        transform: scale(0.1) rotate(20deg);
+        opacity: 0;
+        box-shadow: 0 0 0 0 #F5402C;
+        background-color: #ff4444;
+    }
+}
+
+.game-title {
+    color: #131313;
+    font-size: 48px;
+    margin-top: 0;
+    margin-bottom: 5px;  /* reduced from 20px */
+    text-align: center;
+}
+.game-tagline {
+    color: #666;
+    font-size: 18px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+@keyframes dropFall {
+    from {
+        transform: translateY(-20px);
+    }
+    to {
+        transform: translateY(600px);
+    }
+}
+@media (max-width: 850px) {
+    .game-wrapper, .score-panel, #game-container {
+        width: 95vw;
+    }
+    
+    #game-container {
+        height: 70vh;
+    }
+}

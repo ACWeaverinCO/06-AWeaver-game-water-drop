@@ -10,29 +10,377 @@ Secondary Colors:
 - Orange:     #FF902A
 - Red:        #F5402C
 - Dark Green: #159A48
+/* charity: water palette and game styles (cleaned)
+
+Primary Colors:
+- Yellow:     #FFC907
+- Blue:       #2E9DF7
+
+Secondary Colors:
+- Light Blue: #8BD1CB
+- Green:      #4FCB53
+- Orange:     #FF902A
+- Red:        #F5402C
+- Dark Green: #159A48
 - Pink:       #F16061
 
-Fonts:
-- Proxima Nova
-- Avenir
-
+Fonts: Montserrat (Google)
 */
 
-game-message {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: #fff7e1(255,255,255,0.95);
-    border-radius: 16px;
-    padding: 40px 60px;
-    font-size: 2.2rem;
-    color: #2E9DF7;
+:root {
+    /* charity: water official palette (hex values from brand guidelines) */
+    --cw-yellow: #FFC907;    /* Primary Yellow */
+    --cw-blue: #2E9DF7;      /* Primary Blue */
+    --cw-light-blue: #8BD1CB;/* Secondary Light Blue */
+    --cw-green: #4FCB53;     /* Secondary Green */
+    --cw-orange: #FF902A;    /* Accent Orange */
+    --cw-red: #F5402C;       /* Red (alerts/bad) */
+    --cw-dark-green: #159A48;/* Dark Green */
+    --cw-pink: #F16061;      /* Pink accent */
+
+    /* Accessibility-focused surface colors */
+    --bg: #fffdf6;           /* very light warm background for adequate contrast */
+    --panel-bg: #fff2df;     /* soft panel background to pair with cw-blue borders */
+    --text-dark: #111111;    /* primary text color */
+
+    /* contrast helpers */
+    --on-yellow: #111111;    /* text color to place on yellow backgrounds (dark) */
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: var(--bg);
+    font-family: 'Montserrat', 'Avenir', 'Proxima Nova', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    padding-bottom: 64px; /* allow space for the fixed footer */
+}
+
+.game-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.score-panel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 800px;
+    padding: 10px;
+    background-color: var(--panel-bg);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.score-panel label {
+    margin-left: 8px;
+    margin-right: 6px;
+    font-weight: 600;
+}
+
+#difficulty {
+    padding: 6px 8px;
+    border-radius: 4px;
+    border: 1px solid rgba(0,0,0,0.12);
+    margin-right: 10px;
+}
+
+.target {
+    font-size: 20px;
     font-weight: bold;
-    z-index: 100;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+    margin-left: 10px;
+}
+
+.timer {
+    flex: 0 1 auto;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+#game-container {
+    width: 800px;
+    height: 600px;
+    background-color: var(--panel-bg);
+    border: 2px solid var(--cw-blue);
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+#start-btn {
+    padding: 8px 16px;
+    background-color: var(--cw-blue);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+#reset-btn {
+    padding: 8px 16px;
+    background-color: var(--cw-blue);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* Hover state for both buttons: yellow background with dark text for contrast */
+#start-btn:hover,
+#reset-btn:hover {
+    background-color: var(--cw-yellow);
+    color: var(--on-yellow);
+}
+.score {
+    flex: 0 1 auto;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.good-drop {
+  position: absolute;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, 
+    rgba(255, 255, 255, 0.9) 0%, 
+    rgba(173, 216, 230, 0.9) 30%, 
+    rgba(0, 154, 222, 1) 70%, 
+    rgba(0, 100, 180, 1) 100%);
+  box-shadow:
+    inset 0 5px 10px rgba(255, 255, 255, 0.5),
+    inset 0 -5px 15px rgba(0, 0, 0, 0.3),
+    0 5px 12px rgba(0, 0, 0, 0.3);
+  animation: 
+  dropFall var(--fall-duration, 3s) linear forwards,
+  shimmerLight 3s ease-in-out infinite;
+  cursor: pointer;
+  transition: transform 0.15s ease, filter 0.3s ease;
+}
+
+/* Highlights */
+.good-drop::before {
+  content: "";
+  position: absolute;
+  top: 10%;
+  left: 15%;
+  width: 30%;
+  height: 30%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.8), transparent 60%);
+  border-radius: 50%;
+}
+.good-drop::after {
+  content: "";
+  position: absolute;
+  bottom: 10%;
+  right: 20%;
+  width: 20%;
+  height: 20%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.3), transparent 70%);
+  border-radius: 50%;
+}
+
+/* Fall animation (same as bad-drop for consistency) */
+@keyframes dropFall {
+  from {
+    transform: translateY(-100px);
+    opacity: 0.9;
+  }
+  to {
+    transform: translateY(600px);
+    opacity: 1;
+  }
+}
+
+/* Soft shimmer animation */
+@keyframes shimmerLight {
+  0%, 100% {
+    box-shadow:
+      inset 0 5px 10px rgba(255, 255, 255, 0.6),
+      inset 0 -5px 15px rgba(0, 0, 0, 0.25),
+      0 5px 12px rgba(0, 0, 0, 0.25),
+      0 0 8px rgba(0, 180, 255, 0.4);
+    /* keep shimmer visual only - don't animate transform so dropFall can control movement */
+    filter: brightness(1);
+  }
+  50% {
+    box-shadow:
+      inset 0 8px 14px rgba(255, 255, 255, 0.8),
+      inset 0 -5px 15px rgba(0, 0, 50, 0.3),
+      0 5px 15px rgba(0, 0, 0, 0.3),
+      0 0 20px rgba(0, 200, 255, 0.7);
+    /* slight brightness change only; no transform */
+    filter: brightness(1.2);
+  }
+}
+
+.bad-drop {
+  position: absolute;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, 
+    rgba(255, 255, 255, 0.9) 0%, 
+    rgba(255, 100, 100, 0.9) 30%, 
+    rgba(200, 0, 0, 1) 70%, 
+    rgba(120, 0, 0, 1) 100%);
+  box-shadow:
+    inset 0 5px 10px rgba(255, 255, 255, 0.5),
+    inset 0 -5px 15px rgba(0, 0, 0, 0.3),
+    0 5px 12px rgba(0, 0, 0, 0.3);
+  animation-name: dropFall, pulseGlow;
+  animation-duration: 3s, 2s;
+  animation-timing-function: linear, ease-in-out;
+  animation-iteration-count: 1, infinite;
+  animation-fill-mode: forwards, none;
+  cursor: pointer;
+  transition: transform 0.15s ease, filter 0.3s ease;
+}
+/* Gloss highlights */
+.bad-drop::before {
+  content: "";
+  position: absolute;
+  top: 10%;
+  left: 15%;
+  width: 30%;
+  height: 30%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.8), transparent 60%);
+  border-radius: 50%;
+}
+.bad-drop::after {
+  content: "";
+  position: absolute;
+  bottom: 10%;
+  right: 20%;
+  width: 20%;
+  height: 20%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.3), transparent 70%);
+  border-radius: 50%;
+}
+
+/* Falling animation (tweak as needed) */
+@keyframes dropFall {
+  from {
+    transform: translateY(-100px);
+    opacity: 0.9;
+  }
+  to {
+    transform: translateY(600px);
+    opacity: 1;
+  }
+}
+
+/* Pulsing red glow */
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow:
+      inset 0 5px 10px rgba(255, 255, 255, 0.5),
+      inset 0 -5px 15px rgba(0, 0, 0, 0.3),
+      0 5px 12px rgba(0, 0, 0, 0.3),
+      0 0 10px rgba(255, 0, 0, 0.5),
+      0 0 20px rgba(255, 0, 0, 0.3);
+  }
+  50% {
+    box-shadow:
+      inset 0 5px 10px rgba(255, 255, 255, 0.5),
+      inset 0 -5px 15px rgba(0, 0, 0, 0.3),
+      0 5px 12px rgba(0, 0, 0, 0.3),
+      0 0 20px rgba(255, 0, 0, 0.8),
+      0 0 40px rgba(255, 0, 0, 0.5);
+  }
+}
+
+@keyframes good-pop {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+        filter: drop-shadow(0 0 0 rgba(0,0,0,0));
+    }
+    40% {
+        transform: scale(1.5) translateY(-6px);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(0.2) translateY(12px);
+        opacity: 0;
+    }
+}
+
+/* Particle burst for good catches */
+.particle {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(0,0) scale(1);
+    opacity: 1;
+    z-index: 200;
+    animation: particle-burst 700ms cubic-bezier(.22,.9,.32,1) forwards;
+}
+
+@keyframes particle-burst {
+    0% {
+        transform: translate(0,0) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--dx, 0px), var(--dy, -40px)) scale(0.6) rotate(var(--rot, 0deg));
+        opacity: 0;
+    }
+}
+
+/* Quick bounce on drop when caught (before explode) */
+.bounce {
+    animation: drop-bounce 160ms cubic-bezier(.2,.8,.2,1);
+}
+
+@keyframes drop-bounce {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.25); }
+    100% { transform: scale(1); }
+}
+
+.game-title {
+    color: var(--text-dark);
+    font-size: 48px;
+    margin-top: 0;
+    margin-bottom: 5px;
     text-align: center;
 }
+
+.game-tagline {
+    color: #666;
+    font-size: 18px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+@keyframes dropFall {
+    from { transform: translateY(-100px); }
+    to { transform: translateY(600px); }
+}
+
+@media (max-width: 850px) {
+    .game-wrapper, .score-panel, #game-container { width: 95vw; }
+    #game-container { height: 70vh; }
+}
+
+/* Confetti */
 .confetti {
     position: absolute;
     width: 12px;
@@ -42,173 +390,34 @@ game-message {
     z-index: 101;
     animation: confetti-fall 1.2s linear forwards;
 }
-@keyframes confetti-fall {
-    0% { top: -30px; opacity: 1; }
-    80% { opacity: 1; }
-    100% { top: 650px; opacity: 0; }
-}
-/* Charity: water Brand Colors & Fonts
-Primary Colors:
-- Yellow:     #FFC907
-- Blue:       #2E9DF7
-Secondary Colors:
-- Light Blue: #8BD1CB
-- Green:      #4FCB53
-- Orange:     #FF902A
-- Red:        #F5402C
-- Dark Green: #159A48
-- Pink:       #F16061
-Fonts:
-- Proxima Nova
-- Avenir
-*/
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-body {
+@keyframes confetti-fall { 0% { top: -30px; opacity: 1; } 80% { opacity: 1; } 100% { top: 650px; opacity: 0; } }
+
+/* Footer */
+.site-footer {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 48px;
+    padding: 8px 12px;
+    background: rgba(255,255,255,0.9);
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    background-color: #fff7e1;
-    font-family: Arial, sans-serif;
+    box-shadow: 0 -2px 8px rgba(0,0,0,0.06);
+    z-index: 300;
 }
-.game-wrapper {
+.site-footer .footer-inner {
+    font-size: 14px;
+    color: #333;
     display: flex;
-    flex-direction: column;
+    gap: 14px;
     align-items: center;
-    gap: 20px;
 }
-.score-panel {
-    display: flex;
-    justify-content: space-between;  /* Space between score and button */
-    align-items: center;
-    width: 800px;
-    padding: 10px;
-    background-color: #fed8c1;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+.site-footer a {
+    color: var(--cw-blue);
+    text-decoration: none;
+    font-weight: 600;
 }
-.timer {
-    flex: 0 1 auto;
-    font-size: 24px;
-    font-weight: bold;
-}
-#game-container {
-    width: 800px;
-    height: 600px;
-    background-color: #fed8c1;
-    border: 2px solid #003366;
-    border-radius: 8px;
-    position: relative;
-    overflow: hidden;
-}
+.site-footer a:hover { text-decoration: underline; }
 
-#start-btn {
-    padding: 8px 16px;
-    background-color: #003366;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-     margin-right: 10px;
-}
-#reset-btn {
-    padding: 8px 16px;
-    background-color: #003366;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-}
-#reset-btn:hover {
-    background-color: #ffc907;
-}
-
-#start-btn:hover {
-    background-color: #ffc907;
-}
-.score {
-    flex: 0 1 auto;  /* Don't grow, can shrink, auto basis */
-    font-size: 24px;
-    font-weight: bold;
-}
-.water-drop {
-    position: absolute;
-    width: 60px;  /* increased from 40px */
-    height: 60px; /* increased from 40px */
-    background-color: #003366;
-    border-radius: 50%;
-    animation: dropFall linear forwards;
-    transform-origin: center;
-    cursor: pointer;
-    padding: 15px;  /* Add padding for larger click area */
-    margin: -15px;  /* Offset padding to maintain visual size */
-    transition: transform 0.1s ease;  /* Smooth hover effect */
-}
-.water-drop:hover {
-    transform: scale(1.1);  /* Slight grow effect on hover */
-}
-
-.bad-drop {
-    background-color: #ff4444;
-    box-shadow: 0 0 10px 2px #F5402C;
-}
-.bad-explode {
-    animation: bad-explode 0.4s linear forwards;
-    z-index: 2;
-}
-@keyframes bad-explode {
-    0% {
-        transform: scale(1);
-        opacity: 1;
-        box-shadow: 0 0 0 0 #F5402C;
-    }
-    60% {
-        transform: scale(2.2) rotate(-20deg);
-        opacity: 0.7;
-        box-shadow: 0 0 30px 10px #F5402C;
-        background-color: #F5402C;
-    }
-    100% {
-        transform: scale(0.1) rotate(20deg);
-        opacity: 0;
-        box-shadow: 0 0 0 0 #F5402C;
-        background-color: #ff4444;
-    }
-}
-
-.game-title {
-    color: #131313;
-    font-size: 48px;
-    margin-top: 0;
-    margin-bottom: 5px;  /* reduced from 20px */
-    text-align: center;
-}
-.game-tagline {
-    color: #666;
-    font-size: 18px;
-    margin-bottom: 20px;
-    text-align: center;
-}
-@keyframes dropFall {
-    from {
-        transform: translateY(-20px);
-    }
-    to {
-        transform: translateY(600px);
-    }
-}
-@media (max-width: 850px) {
-    .game-wrapper, .score-panel, #game-container {
-        width: 95vw;
-    }
-    
-    #game-container {
-        height: 70vh;
-    }
-}

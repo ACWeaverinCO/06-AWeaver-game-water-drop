@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Water Drop Game</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -13,6 +16,13 @@
         <div class="score-panel">
             <div class="score">Score: <span id="score">0</span></div>
             <div class="timer">Time: <span id="time">30</span>s</div>
+            <div class="target">Target: <span id="target">20</span></div>
+            <label for="difficulty">Difficulty:</label>
+            <select id="difficulty">
+                <option value="easy">Easy</option>
+                <option value="normal" selected>Normal</option>
+                <option value="hard">Hard</option>
+            </select>
             <button id="start-btn">Start Game</button>
             <button id="reset-btn">Reset</button>
         </div>
@@ -23,5 +33,12 @@
     </div>
     
     <script src="script.js"></script>
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <span>In support of <strong>charity: water</strong></span>
+            <a href="https://www.charitywater.org/" target="_blank" rel="noopener">Visit charity: water</a>
+            <a href="https://www.charitywater.org/donate" target="_blank" rel="noopener">Donate</a>
+        </div>
+    </footer>
 </body>
 </html>

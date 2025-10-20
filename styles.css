@@ -456,6 +456,47 @@ body {
   .top-logo { width: 110px; }
 }
 
+/* Improved responsive rules for small and very small screens */
+@media (max-width: 700px) {
+  .score-panel {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    width: 95vw;
+  }
+  .score-panel .score, .score-panel .timer, .score-panel .target {
+    text-align: center;
+    width: 100%;
+    font-size: 18px;
+  }
+  #difficulty { margin: 0 auto; }
+  #start-btn, #reset-btn { width: 100%; margin: 0; }
+  #game-container { width: 95vw; height: 62vh; }
+  .game-title { font-size: 32px; }
+  .game-tagline { font-size: 14px; }
+  .top-logo { width: 100px; }
+}
+
+@media (max-width: 420px) {
+  #game-container { height: 58vh; }
+  .game-title { font-size: 26px; }
+  .score-panel { padding: 8px; }
+  .milestone-toast { top: 8%; font-size: 13px; padding: 8px 12px; }
+}
+
+/* Desktop polish: center content and cap width */
+@media (min-width: 900px) {
+  .game-wrapper { max-width: 980px; margin: 24px auto; }
+  .score-panel { width: 100%; max-width: 980px; }
+  #game-container { width: 100%; max-width: 980px; height: 600px; }
+}
+
+/* Make buttons more touch-friendly everywhere */
+#start-btn, #reset-btn, .btn {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: rgba(0,0,0,0.08);
+}
+
 /* Confetti */
 .confetti {
     position: absolute;
